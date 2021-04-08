@@ -1,4 +1,3 @@
-from game.Grid import Grid
 import pygame, sys
 
 class Game:
@@ -7,7 +6,6 @@ class Game:
 		self.screen=pygame.display.set_mode((1080,720))
 		pygame.display.set_caption('Snake AI')
 		self.__fps=30
-		self.__grid=Grid(self.screen)
 
 	def run(self):
 		game_over=False
