@@ -1,33 +1,46 @@
 import pygame, sys
+import cv2
+from src.game.Snake import Snake
+import numpy as np
+
+class Display:
+	def __init__(self):
+		self.Display = np.zeros((2000,2000, 3))
+		pt_vert = [0, 255, 0]
+		for i in range(975, 1025):
+			for j in range(975, 1025):
+				self.Display[i][j] = pt_vert
+
+	def appear_fruit(self):
+		pass
+
+
+class movement:
+	def __init__(self,Display,snake):
+		self.Display = Display
+		self.snake = snake
+	def moveUP(self):
+		pass
+	def moveDown(self):
+		pass
+	def moveLeft(self):
+		pass
+	def moveRight(self):
+		pass
+	def check_move(self):
+		pass
 
 class Game:
-	def __init__(self):
-		pygame.init()
-		self.screen=pygame.display.set_mode((1080,720))
-		pygame.display.set_caption('Snake AI')
-		self.__fps=30
+	def __init__(self,Display):
+		print("Bienvenue dans mon jeu Snake - Première Version")
+		self.Display = Display
+
 
 	def run(self):
-		game_over=False
-		clock= pygame.time.Clock()
-		while not game_over:
-			for event in pygame.event.get():
-				if event.type==pygame.QUIT:
-					game_over=True
-				if event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_UP:
-						self.__grid.snake.moveU()
-					if event.key == pygame.K_LEFT:
-						self.__grid.snake.moveL()
-					if event.key == pygame.K_RIGHT:
-						self.__grid.snake.moveR()
-					if event.key == pygame.K_DOWN:
-						self.__grid.snake.moveD()
+		pass
 
-			self.__grid.draw()
-			self.screen.fill((0, 0, 0))
-			pygame.draw.rect(self.screen, (0, 111, 0), (100, 100, 200, 300))
-			pygame.display.update()
-			clock.tick(self.__fps)
+	def lose(self):
+		pass
 
-		pygame.quit()
+
+

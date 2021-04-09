@@ -26,9 +26,6 @@ while True:
 		pos = [pos[0] - 1, pos[0]]
 		display[pos[0], pos[1]] = [0, 0, 255]
 		cv2.imshow("Test",display)
-	cv2.imshow("Test",display)
-
-
 	if key == 13:
 		print(key)
 		break
