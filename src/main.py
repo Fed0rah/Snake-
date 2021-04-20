@@ -9,33 +9,38 @@ class Snake:
 		self.list_pos = np.array(list_pos)
 		self.head = list_pos[0]
 		self.eaten = eaten
-		self.apple_position = np.random.randint(0,50,2)
+		self.apple_position = np.random.randint(0,50,2)*10
 	def collisition_display(self):
-		return (self.head < 0).any() or (self.head >= 500).any()
+		return (np.array(self.head) < 0).any() or (np.array(self.head) >= 500).any()
 
 	def collision_with_self(self):
-		return (np.linalg.norm(self.head - self.list_pos[1:],axis = 1) ==0).any()
+		return (np.linalg.norm(self.head - self.list_pos[2:],axis = 1) ==0).any()
 
 
 	def collision_with_fruit(self,Display):
+		print("Longueur du snake 1 : {}".format(len(self.list_pos)))
 		if (self.apple_position == self.head).all():
-			self.apple_position = np.random.randint(0,50,2)
-			self.list_pos = self.list_pos.tolist()
-			self.list_pos.insert(self.apple_position,0)
-			self.list_pos = np.array(self.list_pos)
+			a = self.list_pos.tolist()
+			a.insert(0,[self.apple_position[0],self.apple_position[1]])
+			self.list_pos = np.array(a)
+
+			print("Longueur du snake 2 : {}".format(len(self.list_pos)))
 			Display.draw_green(self.list_pos,self.apple_position)
 			return True
+		else:
+			return False
+	###Uniquement pour l'aspect joueur il n'y aura pas besoin pour l'implémentation en Q-learning puisque c'est l'ordi qui gère les actions.
+	def move(self,k,prev_k,action_prev):
 
-	def move(self,k,prev_k):
-		if k == ord("z"):
+		if k == ord("z") and prev_k != ord("s"):
 			return 0
-		if k == ord("d"):
+		if k == ord("d") and prev_k != ord("q") :
 			return 2
-		if k == ord("s"):
+		if k == ord("s") and prev_k != ord("z"):
 			return 1
-		if k == ord("q"):
+		if k == ord("q") and prev_k != ord("d"):
 			return 3
-		return prev_k
+		return action_prev
 
 	## action = 0 : monter
 	## action = 1 : descendre
@@ -45,62 +50,115 @@ class Snake:
 	def take_action(self,action,action_prev):
 		if action == -1:
 			action = action_prev
-		if action == 0 and action_prev != 1:
-			self.list_pos[0][0] -= 10
-			self.head = self.list_pos[0]
-			self.list_pos[1:] = self.list_pos[:len(self.list_pos)-1]
-		if action == 1 and action_prev != 0:
-			self.list_pos[0][0] += 10
-			self.head = self.list_pos[0]
-			self.list_pos[1:] = self.list_pos[:len(self.list_pos)-1]
-		if action == 2 and action_prev != 3:
-			self.list_pos[0][1] += 10
-			self.head = self.list_pos[0]
-			self.list_pos[1:] = self.list_pos[:len(self.list_pos) -1]
-		if action == 3 and action_prev != 2:
-			self.list_pos[0][1] -= 10
-			self.head = self.list_pos[0]
-			self.list_pos[1:] = self.list_pos[:len(self.list_pos)-1]
+		if action_prev == 0:
+			if action == 0:
+				self.list_pos[0][0] -= 10
+				self.head = self.list_pos[0]
+				self.list_pos[1:] = self.list_pos[:len(self.list_pos) - 1]
+			if action == 2:
+				self.list_pos[0][1] += 10
+				self.head = self.list_pos[0]
+				self.list_pos[1:] = self.list_pos[:len(self.list_pos) - 1]
+			if action == 3:
+				self.list_pos[0][1] -= 10
+				self.head = self.list_pos[0]
+				self.list_pos[1:] = self.list_pos[:len(self.list_pos) - 1]
+		if action_prev == 1:
+			if action == 2:
+				self.list_pos[0][1] += 10
+				self.head = self.list_pos[0]
+				self.list_pos[1:] = self.list_pos[:len(self.list_pos) - 1]
+			if action == 3:
+				self.list_pos[0][1] -= 10
+				self.head = self.list_pos[0]
+				self.list_pos[1:] = self.list_pos[:len(self.list_pos) - 1]
+			if action == 1:
+				self.list_pos[0][0] += 10
+				self.head = self.list_pos[0]
+				self.list_pos[1:] = self.list_pos[:len(self.list_pos) - 1]
+		if action_prev == 2:
+			if action == 0:
+				self.list_pos[0][0] -= 10
+				self.head = self.list_pos[0]
+				self.list_pos[1:] = self.list_pos[:len(self.list_pos) - 1]
+			if action == 2:
+				self.list_pos[0][1] += 10
+				self.head = self.list_pos[0]
+				self.list_pos[1:] = self.list_pos[:len(self.list_pos) - 1]
+			if action == 1:
+				self.list_pos[0][0] += 10
+				self.head = self.list_pos[0]
+				self.list_pos[1:] = self.list_pos[:len(self.list_pos) - 1]
+		if action_prev == 3:
+			if action == 0:
+				self.list_pos[0][0] -= 10
+				self.head = self.list_pos[0]
+				self.list_pos[1:] = self.list_pos[:len(self.list_pos) - 1]
+
+			if action ==1:
+				self.list_pos[0][0] += 10
+				self.head = self.list_pos[0]
+				self.list_pos[1:] = self.list_pos[:len(self.list_pos) - 1]
+			if action == 3:
+				self.list_pos[0][1] -= 10
+				self.head = self.list_pos[0]
+				self.list_pos[1:] = self.list_pos[:len(self.list_pos) - 1]
 		return self
 
 
 	def generer_fruit(self):
-		self.apple_position = np.random.randint(0,50,2)
+		self.apple_position = np.random.randint(0,50,2)*10
 
 
 class Display:
 	def __init__(self):
 		self.Display = np.zeros((500,500,3))
 
-	def draw_red(self,list_pos):
-		for pos in list_pos:
-			self.Display[pos[0]:pos[0] + 10,pos[1]: pos[1] + 10] = [0,0,255]
-	def draw_green(self,list_pos,apple_position):
-		self.Display = np.zeros((500,500,3))
-		self.Display[apple_position[0] : apple_position[0] + 10, apple_position[1]:apple_position[1] + 10] = [0,0,255]
-		for pos in list_pos:
-			self.Display[pos[0] : pos[0] + 10,pos[1]: pos[1] + 10] = [0,255,0]
+	def draw_red(self,apple_position):
+		self.Display[apple_position[0]:apple_position[0] + 10, apple_position[1]:apple_position[1] +10] = [0,0,255]
+	def draw_green(self,list_pos,apple_position = np.array([0,0])):
+		if (apple_position == np.array([0,0])).all():
+
+			self.Display = np.zeros((500,500,3))
+			for pos in list_pos:
+				self.Display[pos[0] : pos[0] + 10,pos[1]: pos[1] + 10] = [0,255,0]
+		else:
+			self.Display = np.zeros((500, 500, 3))
+			self.draw_red(apple_position)
+			for pos in list_pos:
+				self.Display[pos[0]: pos[0] + 10, pos[1]: pos[1] + 10] = [0, 255, 0]
+
 
 
 class Game:
 	def __init__(self):
-		self.snake = Snake([[250,230],[250,240],[250,250]],False)
+		self.snake = Snake([[250,230],[250,250]],False)
 		self.display = Display()
+
 
 	def run(self):
 		alive = True
-		self.display.draw_green(self.snake.list_pos,self.snake.apple_position)
-		self.display.draw_red([self.snake.apple_position])
+		self.display.draw_green(self.snake.list_pos)
+		self.display.draw_red(self.snake.apple_position)
 		cv2.imshow("Snake",self.display.Display)
 		action_prev = 2
+		prev_k = ord("d")
 		while alive:
-			key = cv2.waitKey(int(1000 / 12))
-			action = self.snake.move(key,action_prev)
+			key = cv2.waitKey(int(1000/12))
+			action = self.snake.move(key,prev_k,action_prev)
 			self.snake.take_action(action,action_prev)
-			action_prev = action
+			if key != -1 and key != prev_k:
+				action_prev = action
+				prev_k = key
 			self.display.draw_green(self.snake.list_pos,self.snake.apple_position)
 			if self.snake.collision_with_fruit(self.display):
+				print("il y a eu une collision")
+				self.snake.eaten = True
 				self.snake.generer_fruit()
+			if self.snake.collision_with_self() and not self.snake.eaten:
+				alive = False
+				print("Vous avez perdu")
+			self.snake.eaten = False
 			cv2.imshow("Snake",self.display.Display)
 			if self.snake.collisition_display():
 				alive = False
